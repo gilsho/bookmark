@@ -13,8 +13,6 @@ help_message() {
 	echo "-h, --help 	show this help message and exit"
 	echo "-f 			forces overwrite of an existing bookmark"
 	echo "-l 			lists all the current bookmarks"
-	echo "-e 			treats the given location as executable script"
-	echo "			rather than a directory"
 	echo ""
 	echo "see also: unmark, goto"
 }
@@ -30,14 +28,12 @@ fi
 }
 
 F_FLAG=false
-E_FLAG=false
 L_FLAG=false
 
 while [ $# -gt 0 ]
 do
     case "$1" in
     	(-f) F_FLAG=true;;
-    	(-e) E_FLAG=true;;
     	(-l) L_FLAG=true;;
     	(-h) help_message; exit 0;;
     	(--help) help_message; exit 0;;
@@ -53,8 +49,11 @@ if [[ $L_FLAG = true ]]; then
 fi
 
 if [[ "$#" == "0" ]]; then
-	echo "error: you must supply a name for the bookmark" 1>&2; exit 1;
+	echo "error: you must supply a name for the bookmark" 1>&2
+	exit 1
 fi
+
+
 
 NEW_MARK="$1"
 shift
@@ -71,7 +70,8 @@ else
 fi
 
 if  (($# > 0)); then
-	echo "error: too many arguments" 1>&2; exit 1;
+	echo "error: too many arguments" 1>&2; 
+	exit 1
 fi
 
 marks=()
@@ -88,13 +88,13 @@ if [ -f ~/.bookmarks ]; then
 	done < ~/.bookmarks
 fi
 
-
 NEW_MARK_LINE=$NEW_MARK:$LOCATION
-if [ $E_FLAG = true ]; then
-	NEW_MARK_LINE=$NEW_MARK_LINE:x
-else
+
+if [[ -d $LOCATION ]]; then
 	NEW_MARK_LINE=$NEW_MARK_LINE:d
-fi
+else
+	NEW_MARK_LINE=$NEW_MARK_LINE:x
+fi	
 
 marks=(${marks[@]} $NEW_MARK_LINE)
 

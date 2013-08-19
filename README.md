@@ -1,23 +1,24 @@
 Bookmark
 ========
 
-A command line utility for bookmarking directories. 'bookmark' works by storing
-a hidden file '.bookmarks' in your home directory contain all your currently used
-bookmarks. To install, simply copy the 3 files: mark,unmark, and goto into a 
-directory in your shell PATH and add the following line:
+A command line utility for bookmarking directories and scripts. 'bookmark' allows you to store handy shortcuts to directories and scripts that you navigate to or execute frequently. 'bookmark' works by storing
+a hidden file '.bookmarks' in your home directory contain your currently used bookmarks along with the directory/files to which they point. To install, simply copy the 3 files: 'mark','unmark', and 'goto', into a 
+directory in your shell PATH and add the following line to your .bashrc script:
   
     alias goto='. goto'
 
-to your .bashrc script. From then on, to mark a directory simply type:
+From then on, simply navigate to a directory you wnat to bookmark and type: 
 
-     mark myproj ~/directory1/directory2/.../directoryN
+	mark myproj
+to bookmark your working directory or:
+
+    mark myproj <path to file or script>
 
 then from anywhere in the filesystem typing:
 
     goto myproj
 
-will change the working direcotry to the directory you bookmarked. To delete
-a bookmark simply type:
+will change the working direcotry or execute the script that you bookmarked.To delete a bookmark simply type:
 
     unmark myproj
 
@@ -26,5 +27,4 @@ type:
 
     mark -l
 
-Other options are available. use the -h option to learn more about the 
-command.
+There are more options available. use each command with the -h or --help option to learn more.

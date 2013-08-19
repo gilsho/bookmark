@@ -27,14 +27,14 @@ done
 
 if [[ "$#" == "0" ]]; then
 	echo "error: you must supply a name for the bookmark" 1>&2
-fi
-
-MARK="$1"
-shift
-
-if  (($# > 0)); then
+elif (( $# > 1)); then
 	echo "error: too many arguments" 1>&2;
+else
+	MARK="$1"
+	shift
 fi
+
+
 
 marks=()
 found=false
@@ -51,6 +51,7 @@ if [ -f ~/.bookmarks ]; then
 				found=true
 			else
 				echo "error: invalid bookmark" 1>&2;
+				found=true
 			fi
 		fi
 	done < ~/.bookmarks
