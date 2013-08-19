@@ -1,0 +1,62 @@
+#! /bin/sh
+
+help_message() {
+	echo "usage: goto [-h] bookmark"
+	echo ""
+	echo "navigate to a bookmarked location created using the 'mark' command"
+	echo ""
+	echo "positional arguments:"
+	echo "  bookmark 	a name of the bookmark to navigate to or execute"
+	echo ""
+	echo "optional arguments:"
+	echo "-h, --help 	show this help message and exit"
+	echo ""
+	echo "see also: mark, unmark"
+}
+
+while [ $# -gt 0 ]
+do
+    case "$1" in
+    	(-h) help_message;;
+    	(--help) help_message;;
+    	(-*) echo "$0: error - unrecognized option $1" 1>&2;;
+    	(*)  break;;
+    esac
+    shift
+done
+
+if [[ "$#" == "0" ]]; then
+	echo "error: you must supply a name for the bookmark" 1>&2
+fi
+
+MARK="$1"
+shift
+
+if  (($# > 0)); then
+	echo "error: too many arguments" 1>&2;
+fi
+
+marks=()
+found=false
+if [ -f ~/.bookmarks ]; then
+	while read line    
+	do    
+		split=(${line//:/ })
+		if [ ${split[0]} = $MARK ]; then
+			if [ ${split[2]} = "d" ]; then
+				cd ${split[1]};
+				found=true
+			elif [ ${split[2]} = "x" ]; then
+				${split[1]};
+				found=true
+			else
+				echo "error: invalid bookmark" 1>&2;
+			fi
+		fi
+	done < ~/.bookmarks
+fi
+
+if [ $found = false ]; then
+	echo "error: bookmark not found" 1>&2
+fi
+
