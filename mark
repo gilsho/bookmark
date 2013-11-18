@@ -19,14 +19,15 @@ help_message() {
 
 list_bookmarks() {
 	if [ -f ~/.bookmarks ]; then
-	while read line    
-	do    
-		split=(${line//:/ })
-		echo ${split[0]} "\t->\t" ${split[1]}
-	done < ~/.bookmarks
-fi
+		while read line    
+		do    
+			split=(${line//:/ })
+			echo ${split[0]} "\t->\t" ${split[1]}
+		done < ~/.bookmarks
+	fi
 }
 
+# parse options
 F_FLAG=false
 L_FLAG=false
 
@@ -43,27 +44,29 @@ do
     shift
 done
 
+# if list option selected, list bookmarks list existing bookmarks
 if [[ $L_FLAG = true ]]; then
 	list_bookmarks
 	exit 0
 fi
 
+# parse arguments
 if [[ "$#" == "0" ]]; then
 	echo "error: you must supply a name for the bookmark" 1>&2
 	exit 1
 fi
 
-
-
 NEW_MARK="$1"
 shift
 
+# extract full path of bookmark location
 if [[ "$#" == "0" ]]; then
 	LOCATION=$(pwd)
 else
 	if [[ -d $1 ]]; then
 		LOCATION="$(cd $1; pwd)"
 	else 
+		# resolve full path to file
 		LOCATION=$(python -c "import os; print os.path.abspath(\"$1\")")
 	fi
 	shift
@@ -74,12 +77,14 @@ if  (($# > 0)); then
 	exit 1
 fi
 
+
 marks=()
 if [ -f ~/.bookmarks ]; then
 	while read line    
 	do    
 		split=(${line//:/ })
-		if [ ${split[0]} = $NEW_MARK -a $F_FLAG = false ]; then
+		SAVED_MARK=${split[0]}
+		if [ $SAVED_MARK = $NEW_MARK -a $F_FLAG = false ]; then
 			echo "error: bookmark '$NEW_MARK' already used." 1>&2
 			exit 1
 		else 
@@ -88,15 +93,7 @@ if [ -f ~/.bookmarks ]; then
 	done < ~/.bookmarks
 fi
 
-NEW_MARK_LINE=$NEW_MARK:$LOCATION
-
-if [[ -d $LOCATION ]]; then
-	NEW_MARK_LINE=$NEW_MARK_LINE:d
-else
-	NEW_MARK_LINE=$NEW_MARK_LINE:x
-fi	
-
-marks=(${marks[@]} $NEW_MARK_LINE)
+marks=(${marks[@]} $NEW_MARK:$LOCATION)
 
 rm -rf ~/.bookmarks
 touch ~/.bookmarks

@@ -14,21 +14,23 @@ help_message() {
 	echo "see also: mark, unmark"
 }
 
+# Parse options
 while [ $# -gt 0 ]
 do
     case "$1" in
     	(-h) help_message;;
     	(--help) help_message;;
-    	(-*) echo "$0: error - unrecognized option $1" 1>&2;;
+    	(-*) echo "$0: error - unrecognized option $1" 1>&2; exit 1;;
     	(*)  break;;
     esac
     shift
 done
 
+# Parse arguments
 if [[ "$#" == "0" ]]; then
-	echo "error: you must supply a name for the bookmark" 1>&2
+	echo "error: you must supply a name for the bookmark" 1>&2; exit 1;
 elif (( $# > 1)); then
-	echo "error: too many arguments" 1>&2;
+	echo "error: too many arguments" 1>&2; exit 1;
 else
 	MARK="$1"
 	shift
@@ -42,17 +44,20 @@ if [ -f ~/.bookmarks ]; then
 	while read line    
 	do    
 		split=(${line//:/ })
-		if [ ${split[0]} = $MARK ]; then
-			if [ ${split[2]} = "d" ]; then
-				cd ${split[1]};
+		SAVED_MARK=${split[0]}
+		LOCATION=${split[1]}
+		if [ $SAVED_MARK = $MARK ]; then
+			if [ -d $LOCATION ]; then
+				cd $LOCATION;
 				found=true
-			elif [ ${split[2]} = "x" ]; then
-				${split[1]};
+			elif [-f $LOCATION ]; then
+				$LOCATION;
 				found=true
 			else
 				echo "error: invalid bookmark" 1>&2;
 				found=true
 			fi
+			break;
 		fi
 	done < ~/.bookmarks
 fi

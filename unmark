@@ -14,6 +14,7 @@ help_message() {
 	echo "see also: mark, goto"
 }
 
+# parse options
 A_FLAG=false
 while [ $# -gt 0 ]
 do
@@ -31,6 +32,7 @@ if [ "$#" == "0" -a $A_FLAG = false ]; then
 	echo "error: you must supply a name for the bookmark" 1>&2; exit 1;
 fi
 
+# parse arguments
 NEW_MARK="$1"
 shift
 
@@ -38,17 +40,20 @@ if  (($# > 0)); then
 	echo "error: too many arguments" 1>&2; exit 1;
 fi
 
+# accumulate all bookmarks other than one selected for removal
 marks=()
 if [ -f ~/.bookmarks ]; then
 	while read line    
 	do    
 		split=(${line//:/ })
-		if [ ! ${split[0]} = "$NEW_MARK" -a "$A_FLAG" = false ]; then
+		SAVED_MARK=${split[0]}
+		if [ ! $SAVED_MARK = "$NEW_MARK" -a "$A_FLAG" = false ]; then
 			marks+=($line)
 		fi
 	done < ~/.bookmarks
 fi
 
+# replace old bookmark file with new contents
 rm -rf ~/.bookmarks
 touch ~/.bookmarks
 for mark in ${marks[@]}; do
