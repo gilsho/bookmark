@@ -115,9 +115,11 @@ mark() {
 		do    
 			local split=(${line//:/ })
 			local saved_mark=${split[0]}
-			if [ $saved_mark = $new_mark -a $f_flag = false ]; then
-				echo "error: bookmark '$new_mark' already used." 1>&2
-				return 1
+			if [ $saved_mark = $new_mark ]; then
+				if [  $f_flag = false ]; then
+					echo "error: bookmark '$new_mark' already used." 1>&2
+					return 1
+				fi
 			else 
 				marks+=($line)
 			fi
