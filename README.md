@@ -4,7 +4,6 @@ Bookmark
 A command line utility for bookmarking directories and scripts. 'bookmark' allows you to store handy shortcuts to directories and scripts that you navigate to or execute frequently. 'bookmark' works by storing
 a hidden file '.bookmarks' in your home directory contain your currently used bookmarks along with the directory/files to which they point. To install, simply copy the 'bookmark' file into a persistent directory and add the following line to your .bashrc script:
   
-    alias goto='. goto'
     source /path/to/bookmark
 
 From then on, simply navigate to a directory you want to bookmark and type: 
