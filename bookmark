@@ -235,5 +235,28 @@ go() {
 	fi
 }
 
+
+bookmark_list() {
+	LIST=""
+	while read line    
+	do    
+		split=(${line//:/ })
+		SAVED_MARK=${split[0]}
+		LIST=$SAVED_MARK" "$LIST 
+	done < ~/.bookmarks
+	echo $LIST
+}
+
+bookmark_autocomplete()
+{
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    MARKS=$( bookmark_list )
+    COMPREPLY=( $(compgen -W "$MARKS" -- $cur) )
+}
+
+complete -F bookmark_autocomplete mark
+complete -F bookmark_autocomplete unmark
+complete -F bookmark_autocomplete go
+
 	
 
