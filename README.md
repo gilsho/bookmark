@@ -2,7 +2,7 @@ Bookmark
 ========
 
 A command line utility for bookmarking directories and scripts. *bookmark* allows you to store handy shortcuts to directories and scripts that you navigate to or execute frequently. *bookmark* works by storing
-a hidden file '.bookmarks' in your home directory contain your currently used bookmarks along with the directory/files to which they point. To install, simply copy the 'bookmarki.sh' file into a persistent directory and add the following line to your .bashrc script:
+a hidden file '.bookmarks' in your home directory contain your currently used bookmarks along with the directory/files to which they point. To install, simply copy the 'bookmark.sh' file into a persistent directory and add the following line to your .bashrc script:
   
     source /path/to/bookmark.sh
 
@@ -15,7 +15,7 @@ to bookmark your working directory or:
 
 then from anywhere in the filesystem typing:
 
-    go myproj
+    goto myproj
 
 will change the working direcotry or execute the script that you bookmarked. To delete a bookmark simply type:
 
@@ -28,7 +28,7 @@ type:
 
 Autocompletion is supported, so pressing 
 	
-	go abc [tab]
+	goto abc [tab]
 
 will list all the avaialble bookmarks starting with the letters "abc". If there is only one matching bookmark, the script will automatically complete the full bookmark name into the command line.
 
