@@ -247,25 +247,27 @@ goto() {
 
 
 bookmark_list() {
-  local list=""
+  list=()
   while read line
   do
-    local split
     # split line into array, with colon character as delimiter
     IFS=":" read -r -a split <<< "$line"
-    local saved_mark="${split[0]}"
-    local list="$saved_mark"" ""$list"
+    saved_mark="${split[0]}"
+    list="$saved_mark"" "$list
   done < ~/.bookmarks
-  echo "$list"
+  echo $list
 }
 
 bookmark_autocomplete()
 {
-    local cur=${COMP_WORDS[COMP_CWORD]}
-    local marklist=$( bookmark_list )
-    COMPREPLY=( $(compgen -W "$marklist" -- $cur) )
+  local list=$( bookmark_list )
+
+  local cur=${COMP_WORDS[COMP_CWORD]}
+  COMPREPLY=( $(compgen -W "$list" -- $cur) )
 }
 
-complete -F bookmark_autocomplete mark
-complete -F bookmark_autocomplete unmark
-complete -F bookmark_autocomplete go
+# disable autocomplete until we can figure out how to autocomplete
+# on names that contain spaces.
+# complete -F bookmark_autocomplete mark
+# complete -F bookmark_autocomplete unmark
+# complete -F bookmark_autocomplete go
